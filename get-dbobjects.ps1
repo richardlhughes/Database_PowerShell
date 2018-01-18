@@ -1,6 +1,6 @@
 #Get the database names
 [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | out-null
-$ServerName='telusdwqa\mssql2016'# the server it is on
+$ServerName='server\instance'# the server it is on
 $s = New-Object ('Microsoft.SqlServer.Management.Smo.Server') $ServerName
 $dbs=$s.Databases | Where {(!($_.name -Like "*temp*" )) -and ($_.id -le 4)}
 $exclude=$s.Databases | Where {$_.name -Like "*temp*"}
@@ -17,7 +17,7 @@ ForEach ($Database in $dbname){
 echo "The current database is $($Database)"
 #Start-Job -Name 'backup_$($Database)' -ScriptBlock{
 #$Database=$dbname[0].Name # the name of the database you want to script as objects
-$DirectoryToSaveTo="C:\src\telusdwqa\" # the directory where you want to store them
+$DirectoryToSaveTo="C:\src\$($ServerName)\" # the directory where you want to store them
 # Load SMO assembly, and if we're running SQL 2008 DLLs load the SMOExtended and SQLWMIManagement libraries
 $v = [System.Reflection.Assembly]::LoadWithPartialName( 'Microsoft.SqlServer.SMO')
 if ((($v.FullName.Split(','))[1].Split('='))[1].Split('.')[0] -ne '9') {
